@@ -1,0 +1,207 @@
+---
+title: "IntroduçãoR"
+author: "Ana Lu"
+date: "15 de outubro de 2018"
+output: html_document
+---
+
+# Pacotes
+
+Os pacotes são o coração do R e são desenolvidos pela comunidade de usuários. Um pacote reúne um conjunto de funções e as vezes dados em diferentes formatos.
+
+Existem três maneiras de instalar pacotes:
+
+- Via CRAN (Comprehensive R Archive Network): `install.packages("nome-do-pacote")`.
+
+- Via Github: `devtools::install_github("nome-do-repo/nome-do-pacote")`.
+
+- Via arquivo .zip/.tar.gz: `install.packages("C:/caminho/nome-do-pacote.zip", repos = NULL)`.
+
+Uma vez instalados no computador, eles não precisam ser re-instalados, apenas carregados com a função `library`
+
+```{r}
+library(tidyverse)
+```
+**dica: antes de começar a trabalhar em um script, instale todos os pacotes que irá precisar**
+
+# Data Frames
+
+As principais características de um data frame são: 
+
+(1) cada coluna representa uma variável (ou característica) de um conjunto de observações; 
+
+(2) cada linha representa uma observação e contém os valores de cada variável para tal observação. 
+
+Um exemplo de data frame:
+
+| Candidato | Partido | Votos | 
+| --------- |:-------:| -----:|
+| Beatriz   | PMDB    |   350 | 
+| Danilo    | SOL     |  1598 | 
+| Pedro     | PTB     |   784 | 
+| Davi      | PSD     |   580 | 
+| Mateus    | PV      |   2   | 
+
+Vamos carregar um pacote chamado babynames, que contém diversos conjuntos de dados úteis para fins didáticos. 
+```{r}
+
+library(babynames)
+
+```
+vamos usar o help (documentação) do R para descobrir o que há no data frame chamado babynames:
+```{r}
+?babynames
+
+```
+Se quiseremos olhar para os dados que acabamos de carregar utilizamos a função _View_ (com V maiúsculo, algo pouco usual em R):
+```{r}
+View(babynames)
+```
+O _View_ não é muito útil para olhar um grande volume de dados, temos funções melhores como _str_ ou _head_
+
+Compare os resultados
+
+```{r}
+str(babynames)
+head(babynames)
+
+```
+
+E se eu quiser apenas saber o nome das varáveis?
+```{r}
+names(babynames)
+```
+
+Outras funções para explorar o data frame
+```{r}
+ncol(babynames) #número de colunas
+nrow(babynames) #número de linhas
+glimpse(babynames)
+```
+
+## Argumentos ou parâmetros das funções
+
+Note que em todas as funções que utilizamos até agora, _babynames_ está dentro dos parênteses.
+Essa __sintaxe__ é característica das funções de R. O que vai entre parênteses são os __argumentos__ ou __parâmetros__ da função, ou seja, os "inputs" que serão transformados.
+
+Uma função pode receber mais de um argumento. Pode também ter argumentos não obrigatórios, ou seja, para os quais não é necessário informar nada se você não quiser alterar os valores pré-definidos. 
+Por exemplo, a função _head_ contém o argumento _n_, que se refere ao número de linhas a serem __impressas__ na tela, pré-estabelecido em 6 (você pode conhecer os argumentos da função na documentação do R usando _?_ antes do nome da função). 
+Para alterá-lo para 10, por exemplo, basta fazer:
+
+```{r}
+head(babynames, n = 10)
+```
+## Pausa para um comentário
+
+Podemos fazer comentários no meio do código. Basta usar # e tudo que seguir até o final da linha não será interpertado pelo R como código. Por exemplo:
+```{r}
+#Função que imprime os nomes das variáveis do data frame baby name
+names(babynames)
+```
+## Construindo vetores e data frames
+
+Para remover o data frame que estavamos trabalhando:
+```{r}
+rm(babynames)
+```
+
+Escolha 2 jornais ou portais de notícias diferentes. Vá em cada um deles e colete 3 notícias. Em casa notícia, colete as seguintes informações:
+
+- Nome do jornal ou portal
+- Data da notícia (não precisa coletar a hora)
+- Título
+- Autor(a)
+- Número de palavras no texto (use o MS Word ou Libre Office se precisar - chute se tiver preguiça)
+- Marque 1 se a notícia for sobre política e 0 caso contrário
+- Marque 1 se a notícia for sobre esporte e 0 caso contrário
+- Marque TRUE se a notícia contiver vídeo e FALSE caso contrário
+
+**Insira as informações nos vetores em ordem de coleta das notícias**
+
+Com cada informação, vamos construir um vetor, como por exemplo:
+
+```{r}
+nome <- c("The Guardian", "The Guardian", "The Guardian", "Folha de São Paulo","Folha de São Paulo", "Folha de São Paulo")
+```
+Repita paras as demais informações
+
+Note que a função usada para construção do vetor é a `c()`
+
+Porém, se vc não colocar ela dentro de um objeto (no exemplo _nome_), o vetor criando não será guaradado no **Environment** e você não poderá usá-lo depois.
+
+O símbolo `<-` é o símbolo de atribuição ou como você "guarda" os dados em algum objeto (é até bem lógico, pois é uma flecha)
+
+**Algumas observações**
+
+- Os textos foram inseridos entre aspas. Os números, não. Se números forem inseridos com aspas o R os entenderá como texto também.
+- Além de textos e números, temos no vetor vídeo valores lógicos, TRUE e FALSE. logical é um tipo de dado do R (e é particularmente importante).
+- NA é o símbolo do R para missing values e lidar com eles é uma das grandes chatices em R.
+
+```{r}
+# Data
+# Obs: ha uma funcao em R com nome "data".
+# Evite dar a objetos nome de funcoes
+
+date <- c("10/03/2017", "10/03/2017", "10/03/2017", "10/03/2017", "10/03/2017", "10/03/2017")
+
+# Titulo
+titulo <- c("'Trump lies all the time': Bernie Sanders indicts president's assault on democracy",
+            "Bruno, still guilty of murder but bafflingly welcome to walk back into football",
+            "BBC interviewee interrupted by his children live on air – video",
+            "Bolsista negra é hostilizada em atividade no campus da FGV de SP",
+            "Meninas podem ser o que quiserem, inclusive matemáticas",
+            "Favela de Paraisópolis tem novo incêndio em menos de dez dias")
+
+# Autor
+autor <- c("Ed Pilkington ", "Barney Ronay", NA, "Joana Cunha; Jairo Marques", "Marcelo Viana", NA)
+
+# Numero de caracteres
+caracteres <- c(5873, 6301, 358, 3644, 4086, 3454)
+
+# Conteudo sobre politica
+politica <- c(1, 0, 0, 0, 0, 0)
+
+# Conteudo sobre esporte
+esporte <- c(0, 1, 0, 0, 0, 0)
+
+# Contem video
+video <- c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE)
+```
+** Observe os dados criados no seu _Environment_**
+
+Cada vetor tem um nome (que você escolheu), a classe, o número de colunas e variáveis e um pedaço das informações contidas.
+
+## Criando um data frame de vetores
+
+Os vetores podem ser pareados e combinados com a função `data.frame`. Porém, os dados tem que ter a mesma ordem e  o mesmo comprimento:
+
+```{r}
+dados_jornais <- data.frame(nome, date, titulo, autor, caracteres, politica, esporte, video)
+```
+Observe que o seu data frame foi guardado em um local diferente dos vetores.
+Para observá-lo, basta usar a função `View()`ou clicar no ícone da tabela.
+
+Use as funções aprendidas anteriormente para explorá-lo.
+
+Com funções mais avançadas do R e _webscraping_ podemos fazer isso automaticamente de páginas da internet.
+
+Por exemplo, o pacote `rvest`tem uma série de funções para trabalhara com dados da internet como:
+
+**Para acessar páginas da web:**
+
+`html_session()` abre uma sessão do usuário (baixa página, carrega cookies etc).
+`follow_link()`, `jump_to()` acessa uma página web a partir de um link `tag <a>` ou url.
+`html_form()` carrega todos os formulários contidos numa página.
+`set_value()` atribui valores a parâmetros do formulário.
+`submit_form()` submete um formulário obtido em html_form.
+
+**Para trabalhar com arquivos HTML:**
+
+`read_html()` lê o arquivo HTML de forma estruturada e facilita impressão.
+`html_nodes()` cria uma lista com os nós identificados por uma busca em CSS path ou XPath.
+`html_node()` é um caso especial que assume que só será encontrado um resultado.
+`html_text()` extrai todo o conteúdo de um objeto e retorna um texto.
+`html_table()` extrai o conteúdo de uma `<table>` e transforma em um data_frame.
+`html_attr()` extrai um atributo de uma tag, por exemplo href da tag `<a>`.
+
+Para mais informações e exemplos acesse: [Curso-R](https://www.curso-r.com/material/webscraping/)

@@ -1,0 +1,65 @@
+---
+title: "Exercicios_IntrodR"
+author: "Ana Lu"
+date: "16 de outubro de 2018"
+output: html_document
+---
+
+Carregue o data frame babynames:
+```{r, eval=FALSE}
+library(babynames)
+```
+
+Encontre os erros nos códigos a seguir: 
+
+```{r, eval=FALSE}
+Head(babynames)
+```
+
+```{r, eval=FALSE}
+str(Babynames)
+```
+
+```{r, eval=FALSE}
+dim[babynames]
+```
+
+```{r, eval=FALSE}
+nomes(babynames)
+```
+
+```{r, eval=FALSE}
+head(babynames, x = 10)
+```
+
+```{r, eval=FALSE}
+v1 <- ("pato", "cachorro", "minhoca", "lagarto")
+```
+
+```{r, eval=FALSE}
+v2 <- c("1", "2", "3", "4")
+v1 + 42
+```
+
+```{r, eval=FALSE}
+v1 <- c("pato", "cachorro", "minhoca", "lagarto"
+```
+
+```{r, eval=FALSE}
+v3 <- c(33 31 40 25 27 40)
+```
+
+```{r, eval=FALSE}
+v1 <- c(pato, cachorro, minhoca, lagarto)
+```
+
+```{r, eval=FALSE}
+v1 <- c("pato", "cachorro"", "minhoca", "lagarto")
+v3 <- c(33, 31, 40, 25, 27, 40)
+myData <- data.frame(v1, v3)
+```
+
+```{r, eval=FALSE}
+ls
+```
+
