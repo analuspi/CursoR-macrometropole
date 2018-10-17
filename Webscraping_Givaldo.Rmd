@@ -1,0 +1,67 @@
+---
+title: "WebScraping"
+author: "Ana Lu"
+date: "16 de outubro de 2018"
+output: html_document
+---
+
+# Webscrapping para capturar discursos de um deputado do site da câmara
+
+Vamos raspar todos os discursos do Deputado Gilvado Vieira no site da Câmara dos Deputados.
+
+A primeira ferramenta que veremos neste tutorial é o pacote stringr, que é parte do Vamos começar carregando os pacotes rvest e stringr:
+
+```{r}
+library(rvest)
+library(stringr)
+```
+
+A seguir, vamos salvar em um objeto a página que contém uma tabela com os links para os discursos. 
+```{r}
+url_tabela_discursos <- "http://www.camara.leg.br/internet/sitaqweb/resultadoPesquisaDiscursos.asp?txOrador=Givaldo+Vieira&txPartido=&txUF=&dtInicio=&dtFim=&txTexto=&txSumario=&basePesq=plenario&CampoOrdenacao=dtSessao&PageSize=20&TipoOrdenacao=DESC&btnPesq=Pesquisar%22"
+
+```
+
+Vamos capturar os links de cada discurso. 
+```{r}
+url_discursos <- url_tabela_discursos %>%
+  read_html() %>%
+  html_nodes(xpath = "//table[@class = 'table table-bordered variasColunas']//td/a") %>%
+  html_attr(name = "href")
+```
+
+Vamos arrumar as urls (tirar caracteres "ilegais" e espaços e padronizar o começo delas)
+
+```{r}
+url_discursos <- str_replace_all(url_discursos, " ", "")
+url_discursos <- str_replace_all(url_discursos, "\r", "")
+url_discursos <- str_replace_all(url_discursos, "\n", "")
+
+```
+```{r}
+url_discursos <- str_c("http://www.camara.leg.br/internet/sitaqweb/", url_discursos)
+```
+
+Vamos agora passar por todos os urls e obter os discursos. Gravaremos os discursos em um objeto chamado "discursos", e cada posição conterá um discurso.
+
+```{r}
+discursos <- c()
+```
+
+
+```{r, eval=FALSE}
+
+for (i in url_discursos) {
+  
+  discurso <- i %>%
+    read_html() %>%
+    html_nodes(xpath = "//div[@id  = 'content']//p") %>%
+    html_text()
+  
+  discursos <- c(discursos, discurso)
+  
+}
+
+```
+
+Agora só analisar o texto com funções do  `stringr`
