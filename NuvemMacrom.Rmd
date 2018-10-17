@@ -88,6 +88,7 @@ macrom %>%
 
 ```{r}
 library(wordcloud)
+
 ```
 ```{r}
 brewer.pal.info
@@ -99,3 +100,4 @@ macrom %>%
                  rot.per = 0.1, colors = brewer.pal(11, "Spectral")))
 ```
 
+[Nuvem 1] (https://github.com/analuspi/CursoR-macrometropole/blob/master/Imagens/NuvemMacro.jpeg)
