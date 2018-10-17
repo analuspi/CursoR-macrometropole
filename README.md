@@ -23,7 +23,7 @@
 
 13 – 14:30h Trabalhando com bancos de dados (Haydee)
 
-14:30 – 15h Gráficos com ggplot2 (Bia) 
+14:30 – 15h R e desafios no Projeto Temático (Beatriz) [material](https://beatrizmilz.github.io/apresentacao_R_MMP_17-10-2018/) 
 
 15 – 15:15h Intervalo
 
@@ -37,6 +37,7 @@ https://cran.r-project.org/
 
 https://www.rstudio.com/products/rstudio/download/
 
-O pacote "tidyverse" `install.packages("tidyverse")`
+O pacote "tidyverse" 
+`install.packages("tidyverse")`
 
-**Observação: os exercícios desse curso são baseados no material do Curso-R e na disciplina do Prof. Leonardo Barone.**
+**Observação: os exercícios desse curso são baseados no material do [Curso-R](https://www.curso-r.com/cursos/intro-r/) e na disciplina ["Introdução à Programação e Ferramentas Computacionais para as Ciências Sociais"](https://github.com/leobarone/FLS6397_2018) do Prof. Leonardo Barone.**
