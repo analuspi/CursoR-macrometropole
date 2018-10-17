@@ -1,0 +1,178 @@
+---
+title: "TrabalhoFinal"
+author: "Ana Lu"
+date: "24 de julho de 2018"
+output: html_document
+---
+
+#Preferência Hidrossocial
+
+##Carregando arquivos e agrupando
+
+```{r}
+library(pdftools)
+```
+```{r}
+library(tidytext)
+```
+
+```{r, collapse=FALSE}
+EntrevistaAmauri <- pdf_text("AmauriPolachi_CBHAT.pdf")
+EntrevistaCica <- pdf_text("Ciça_AliançaPelaÁgua.pdf")
+EntrevistaEdson <- pdf_text("EdsonAparecido_Coletivo de luta pela água.pdf")
+EntrevistaMarciaN <- pdf_text("MárciaNascimento_SMASP.pdf")
+EntrevistaKachel <- pdf_text("Kachel_UMC_ExSABESP.pdf")
+EntrevistaMarzeni <- pdf_text("Marzeni_ColetivoAguaSim_ExSABESP.pdf")
+EntrevistaStela <- pdf_text("StelaGoldenstein_AguasClaras.pdf")
+EntrevistaCibim <- pdf_text("JulianaCibim_AliançaPelaÁgua.pdf")
+EntrevistaLuizDeus <- pdf_text("LuizdeDeus_AssociaçãoSenhorBonfim.pdf")
+Entrevista_Maru <- pdf_text("Maru_AliançapelaAgua.pdf")
+EntrevistaMonicaRos <- pdf_text("MonicaRossi_CDHU.pdf" )
+Entrevista_Tagnin <- pdf_text("Tagnin_SENAC.pdf")
+Entrevista_Virgilio <- pdf_text ("Virgilio _MDV.pdf")
+Entrevista_Mazolenis <- pdf_text("EduardoMazolenis_Cetesb.pdf")
+Entrevista_RicardoCastro <- pdf_text ("Ricardo Castro_MP.pdf")
+```
+```{r}
+EntrevPrefHidro <- c(EntrevistaAmauri, EntrevistaCica, EntrevistaEdson, EntrevistaMarciaN,
+                     EntrevistaKachel, EntrevistaMarzeni, EntrevistaStela, EntrevistaCibim,
+                     EntrevistaLuizDeus, Entrevista_Maru, EntrevistaMonicaRos, Entrevista_Tagnin, Entrevista_Virgilio, Entrevista_Mazolenis, Entrevista_RicardoCastro)
+```
+
+```{r, collapse=FALSE}
+
+library(dplyr)
+library(stringr)
+library(tm)
+
+EntrevPrefHidro <- EntrevPrefHidro %>%
+  paste(collapse = "") %>%
+  str_remove_all(c("\r", "\n")) %>%
+  str_to_lower() %>%
+  removeNumbers() %>%
+  removePunctuation() %>%
+  removeNumbers()
+  
+  
+```
+
+##Tokenização
+```{r, collapse=FALSE}
+tokensHidro <- str_split(EntrevPrefHidro, " ")
+
+tokensHidro <- unlist(tokensHidro)
+```
+
+
+
+##Criando o Data Frame
+
+```{r, collapse=FALSE}
+entrevista_df <- data_frame(id_discurso = 1:length(tokensHidro), 
+                           text = tokensHidro)
+entrevista_token <- entrevista_df %>%
+  unnest_tokens(word, text)
+```
+
+
+##Stopwords
+```{r, collapse=FALSE}
+stopwords_pt <- c(stopwords("pt"), "que", "é", "entrevistado",
+                  "entrevistador", "pra", "porque", "r", "nentrevistador", 
+                  "nentrevistado", "n", "questão", "vai", "ai",
+                  "aqui", "sobre", "assim", "etc","pois", "desse", "né", "aí", "paulo",
+                  "ainda", "então", "gente", "ser", "joão", "ricardo", "de", "lá", 
+                  "acho", "ter", "sim", "coisa", "fazer", "estar", "fazendo", "d")
+
+stopwords_pt_df <- data.frame(word = stopwords_pt)
+
+entrevista_token <- entrevista_token %>%
+  anti_join(stopwords_pt_df, by = "word")
+```
+
+##Grafico de frequencia de palavras
+```{r, collapse=FALSE}
+entrevista_token %>%
+  count(word, sort = TRUE)
+
+library(ggplot2)
+
+entrevista_token %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 270) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot()+
+  geom_col(aes(word, n),colour="black", fill= "green") +
+  xlab(NULL) +
+  coord_flip()
+```
+
+##Nuvem de palavras
+```{r, collapse=FALSE}
+library(wordcloud)
+
+entrevista_token %>%
+  count(word, sort = T) %>%
+  with(wordcloud(word, n, use.r.layout = TRUE, max.words = 50))
+```
+
+##Rede de Bigrams
+```{r, collapse=FALSE}
+entrevista_bigrams <- entrevista_df %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
+
+entrevista_bigrams <- entrevista_bigrams %>% 
+  filter(!(is.na(bigram)))
+
+entrevista_bigrams %>%
+  count(bigram, sort = TRUE)
+
+```
+
+###Stopwords
+```{r, collapse=FALSE}
+library(tidyr)
+
+bigrams_separated <- entrevista_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stopwords_pt) %>%
+  filter(!word2 %in% stopwords_pt)
+
+bigrams_filtered <- bigrams_separated %>%
+  anti_join(stopwords_pt_df, by = c("word1" = "word")) %>%
+  anti_join(stopwords_pt_df, by = c("word2" = "word"))
+
+bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+```
+
+###Rede
+```{r, collapse=FALSE}
+
+library(igraph)
+
+library(ggraph)
+
+bigram_graph <- bigram_counts %>%
+  filter(n > 2) %>%
+  graph_from_data_frame()
+
+set.seed(2016)
+
+a <- grid::arrow(type = "open", length = unit(.10, "inches"))
+
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(show.legend = FALSE, arrow=a, end_cap = circle(.05, 'inches')) +
+  geom_node_point(color = "lightgreen", size = 5) +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+  theme_void()
+
+```
+
+#Preferência Tecnocrática

@@ -1,0 +1,101 @@
+---
+title: "Nuvem_Macrom"
+author: "Ana Lu"
+date: "16 de outubro de 2018"
+output: html_document
+---
+
+## Carregando pacotes
+
+```{r}
+library(readtext)
+library(stringr)
+library(tm)
+library(dplyr)
+
+```
+
+```{r, eval=FALSE}
+textoMacrom <- readtext(paste0("Macrom_arq/*.pdf"))
+```
+
+
+```{r}
+Macrom <- textoMacrom %>%
+  paste(textoMacrom,collapse = " ") %>%
+  removeNumbers() %>%
+  removePunctuation() %>%
+  str_remove_all("\r") %>% 
+  str_remove_all("\n") %>% 
+  str_to_lower() %>% 
+  stripWhitespace()
+```
+## Transformando em dataframe
+
+```{r}
+library(tidytext)
+```
+
+```{r}
+macrom_df <- data_frame(id_discurso = 1:length(Macrom), 
+                          text = Macrom)  
+```
+
+```{r}
+macrom <- macrom_df %>%
+  unnest_tokens(word, text)
+```
+
+```{r}
+stopwords_pt <- c(stopwords("pt"), "que", "porque", "vai","aqui", "?",
+                  "sobre", "assim", "etc","pois", "desse", "ainda", "Pedro", "Jacobi",
+                  "gente", "ser", "de", "i", "iv", "mmp","b", "c", "dr", "dra", "iii", 
+                  "ii", "n", "prof")
+```
+
+```{r}
+stopwords_pt_df <- data.frame(word = stopwords_pt)
+```
+
+```{r}
+macrom <-  macrom %>%
+  anti_join(stopwords_pt_df, by = "word")
+```
+
+```{r}
+macrom %>%
+  count(word, sort = TRUE)
+```
+
+## Gráfico de Frequência de palavras
+
+```{r}
+library(ggplot2)
+
+```
+```{r}
+macrom %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 70) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot()+
+  geom_col(aes(word, n),colour="black", fill= "lightblue") +
+  xlab(NULL) +
+  ylab("frequ?ncia") +
+  coord_flip()
+```
+## Nuvem de palavras
+
+```{r}
+library(wordcloud)
+```
+```{r}
+brewer.pal.info
+
+macrom %>%
+  count(word, sort = T) %>%
+  with(wordcloud(word, n, use.r.layout = F,max.words = 80, random.order = TRUE, 
+                 random.color = T, 
+                 rot.per = 0.1, colors = brewer.pal(11, "Spectral")))
+```
+
