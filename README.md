@@ -1,4 +1,4 @@
-# Minicurso Introdução ao R e aplicações na Macrometrópole
+# Oficina de Introduçao ao Software R
 
 
 
