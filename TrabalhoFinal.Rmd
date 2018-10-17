@@ -5,9 +5,9 @@ date: "24 de julho de 2018"
 output: html_document
 ---
 
-#Preferência Hidrossocial
+# Preferência Hidrossocial
 
-##Carregando arquivos e agrupando
+## Carregando arquivos e agrupando
 
 ```{r}
 library(pdftools)
@@ -56,7 +56,7 @@ EntrevPrefHidro <- EntrevPrefHidro %>%
   
 ```
 
-##Tokenização
+## Tokenização
 ```{r, collapse=FALSE}
 tokensHidro <- str_split(EntrevPrefHidro, " ")
 
@@ -65,7 +65,7 @@ tokensHidro <- unlist(tokensHidro)
 
 
 
-##Criando o Data Frame
+## Criando o Data Frame
 
 ```{r, collapse=FALSE}
 entrevista_df <- data_frame(id_discurso = 1:length(tokensHidro), 
@@ -75,7 +75,7 @@ entrevista_token <- entrevista_df %>%
 ```
 
 
-##Stopwords
+## Stopwords
 ```{r, collapse=FALSE}
 stopwords_pt <- c(stopwords("pt"), "que", "é", "entrevistado",
                   "entrevistador", "pra", "porque", "r", "nentrevistador", 
@@ -90,7 +90,7 @@ entrevista_token <- entrevista_token %>%
   anti_join(stopwords_pt_df, by = "word")
 ```
 
-##Grafico de frequencia de palavras
+## Grafico de frequencia de palavras
 ```{r, collapse=FALSE}
 entrevista_token %>%
   count(word, sort = TRUE)
@@ -107,7 +107,7 @@ entrevista_token %>%
   coord_flip()
 ```
 
-##Nuvem de palavras
+## Nuvem de palavras
 ```{r, collapse=FALSE}
 library(wordcloud)
 
@@ -116,7 +116,7 @@ entrevista_token %>%
   with(wordcloud(word, n, use.r.layout = TRUE, max.words = 50))
 ```
 
-##Rede de Bigrams
+## Rede de Bigrams
 ```{r, collapse=FALSE}
 entrevista_bigrams <- entrevista_df %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2)
@@ -129,7 +129,7 @@ entrevista_bigrams %>%
 
 ```
 
-###Stopwords
+### Stopwords
 ```{r, collapse=FALSE}
 library(tidyr)
 
@@ -151,7 +151,7 @@ bigrams_united <- bigrams_filtered %>%
   unite(bigram, word1, word2, sep = " ")
 ```
 
-###Rede
+### Rede
 ```{r, collapse=FALSE}
 
 library(igraph)
@@ -175,4 +175,4 @@ ggraph(bigram_graph, layout = "fr") +
 
 ```
 
-#Preferência Tecnocrática
+
