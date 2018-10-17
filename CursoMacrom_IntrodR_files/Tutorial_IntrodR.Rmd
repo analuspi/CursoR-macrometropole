@@ -4,6 +4,82 @@ author: "Ana Lu"
 date: "15 de outubro de 2018"
 output: html_document
 ---
+# R
+- R foi projetado para ser uma ferramenta que ajuda os cientistas a analisar dados.
+
+- Podemos usar o R para fazer cálculos simples! Exemplos:
+
+```{r}
+1+1
+```
+
+
+Utilize os dois pontos (:) para indicar uma sequência numérica.
+```{r}
+10:20
+```
+Criando um objeto:
+```{r}
+a <- 1
+
+a
+
+a + 2
+```
+```{r}
+dado <- 1:6
+dado
+```
+Dica: Ao nomear o objeto, escolha um padrão para seguir. Não utilize acentos e espaços.
+Exemplo:  minha_variavel é um nome bom. minha variável é um nome que gerará erros.
+
+Dica 2: Se criar um objeto com o nome de um objeto que já existe, o novo objeto irá sobrescrever o objeto antigo. 
+
+
+É possivel realizar operações com os objetos
+```{r}
+dado + 1
+```
+Dica: escreva utilizando o script, esse hábito estimula a criar um registro reproduzível do seu trabalho.
+
+# Objetos no R
+
+Classes de objetos:
+
+    character: texto
+    numeric: números racionais
+    integer: inteiros
+    logical: verdadeiro ou falso
+    factor: categóricos
+    ...
+
+Tipos de objetos:
+
+    vector: unidimensional, apenas uma classe
+    matriz: bidimensional, apenas uma classe
+    data.frame: lista de vetores
+    list: pode contar diferentes classes
+
+Vamos identificar que tipo e classe são os objetos a seguir?
+```{r}
+dado <- c(1,2,3,4,5,6)
+dado
+```
+
+```{r}
+teste <- 5>4
+teste
+```
+
+```{r}
+texto <- c("Hello", "World")
+texto
+```
+```{r}
+igualdade <- 5 == 4
+igualdade
+```
+
 
 # Pacotes
 
