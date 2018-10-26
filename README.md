@@ -3,8 +3,8 @@
 
 
 **Local:** Sala 004 do Prédio S do IEE/USP
-
-**Professoras:** Dra. Ana Lucia Gerardi Spinola e Msc. Haydee Svab
+ 
+**Professoras:** Dra. Ana Lucia Gerardi Spinola [email](analucia.spinola@usp.br) e Msc. Haydee Svab
 
 **Monitora:** Msc. Beatriz Milz
 
@@ -27,7 +27,7 @@
 
 15 – 15:15h Intervalo
 
-15:15 – 16h Análise de Redes Sociais, web scraping e mineração de texto (Ana) [material]()
+15:15 – 16h Análise de Redes Sociais, web scraping e mineração de texto (Ana)
 
 16 – 17h Prática
 
