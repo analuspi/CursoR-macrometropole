@@ -1,0 +1,71 @@
+---
+title: "WebScraping"
+author: "Ana Lu"
+date: "17 de outubro de 2018"
+output: html_document
+---
+
+```{r}
+url_base <- "http://search.folha.uol.com.br/search?q=merenda&site=todos&results_count=3769&search_time=0.033&url=http%3A%2F%2Fsearch.folha.uol.com.br%2Fsearch%3Fq%3Dmerenda%26site%3Dtodos&sr="
+```
+
+```{r}
+i <- 1
+url_pesquisa <- paste(url_base, i, sep = "")
+```
+
+
+```{r}
+for (i in 1:151){
+  i <- (i - 1) * 25 + 1
+  print(i)
+}
+```
+
+```{r}
+library(xml2)
+library(rvest)
+library(dplyr)
+```
+
+```{r}
+pagina <- read_html(url_pesquisa)
+```
+
+```{r}
+nodes_titulos <- html_nodes(pagina, xpath = "//ol/li/div/div/a")
+titulos <- html_text(nodes_titulos)
+links <- html_attr(nodes_titulos, name = "href")
+tabela_titulos <- data.frame(titulos, links)
+```
+
+```{r}
+url_base <- "http://search.folha.uol.com.br/search?q=merenda&site=todos&results_count=3769&search_time=0.033&url=http%3A%2F%2Fsearch.folha.uol.com.br%2Fsearch%3Fq%3Dmerenda%26site%3Dtodos&sr="
+```
+
+```{r}
+dados_pesquisa <- data_frame()
+```
+
+```{r, eval=FALSE}
+for (i in 1:151){
+  
+  print(i)
+  
+  i <- (i - 1) * 25 + 1
+  
+  url_pesquisa <- paste(url_base, i, sep = "")
+  
+  pagina <- read_html(url_pesquisa)
+  
+  nodes_titulos <- html_nodes(pagina, xpath = "//ol/li/div/div/a")
+  
+  titulos <- html_text(nodes_titulos)
+  links <- html_attr(nodes_titulos, name = "href")
+  
+  tabela_titulos <- data.frame(titulos, links)
+  
+  dados_pesquisa <- bind_rows(dados_pesquisa, tabela_titulos)
+}
+```
+

@@ -15,7 +15,7 @@ library(dplyr)
 
 ```
 
-```{r, eval=FALSE}
+```{r}
 textoMacrom <- readtext(paste0("Macrom_arq/*.pdf"))
 ```
 
